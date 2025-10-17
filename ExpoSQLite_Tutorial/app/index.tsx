@@ -147,6 +147,7 @@ export default function App() {
       if (editingId === null) {
         await insertItem(db, name.trim(), parsedQuantity);
       } else {
+        console.log(editingId, name.trim())
         await updateItem(db, editingId, name.trim(), parsedQuantity);
       }
       await loadItems();
@@ -157,7 +158,19 @@ export default function App() {
       console.log("Failed to save/update item", err);
     }
   };
-
+  // sort function
+  const sort = () => {
+      const [tempItem, setTemp] = useState<Item>();
+    for (let i = 0; i < items.length-1; i++) {
+      for (let j = 0; j < items.length-1; j++) {
+        if(items[j].quantity < items[j+1].quantity){
+          setTemp(items[j])
+          items[j] = items[j+1];
+          items[j+1] = tempItem
+        }
+      }
+    }
+  };
   /**
    * Start Edit Function
    *
@@ -250,6 +263,10 @@ export default function App() {
       <Button
         title={editingId === null ? "Save Item" : "Update Item"}
         onPress={saveOrUpdate}
+      />
+      <Button
+        title={"Sort Items"}
+        onPress={sort}
       />
       <FlatList
         style={styles.list}
