@@ -82,6 +82,21 @@ export const fetchItems = async (db: SQLiteDatabase): Promise<Item[]> => {
   return db.getAllAsync<Item>("SELECT * FROM items;");
 };
 
+export const fetchItemsAZ = async (db: SQLiteDatabase): Promise<Item[]> => {
+  return db.getAllAsync<Item>("SELECT * FROM items ORDER BY name;");
+};
+
+export const fetchItemsZA = async (db: SQLiteDatabase): Promise<Item[]> => {
+  return db.getAllAsync<Item>("SELECT * FROM items ORDER BY name DESC;");
+};
+
+export const fetchItems123 = async (db: SQLiteDatabase): Promise<Item[]> => {
+  return db.getAllAsync<Item>("SELECT * FROM items ORDER BY quantity;");
+};
+
+export const fetchItems321 = async (db: SQLiteDatabase): Promise<Item[]> => {
+  return db.getAllAsync<Item>("SELECT * FROM items ORDER BY quantity DESC;");
+};
 /**
  * Update Item
  * 

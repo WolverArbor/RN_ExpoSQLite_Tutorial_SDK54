@@ -14,7 +14,11 @@ import {
   insertItem,
   deleteItem,
   updateItem,
-  type Item 
+  type Item, 
+  fetchItemsAZ,
+  fetchItemsZA,
+  fetchItems123,
+  fetchItems321
 } from "../data/db";
 import ItemRow from "./components/ItemRow";
 
@@ -158,19 +162,6 @@ export default function App() {
       console.log("Failed to save/update item", err);
     }
   };
-  // sort function
-  const sort = () => {
-      const [tempItem, setTemp] = useState<Item>();
-    for (let i = 0; i < items.length-1; i++) {
-      for (let j = 0; j < items.length-1; j++) {
-        if(items[j].quantity < items[j+1].quantity){
-          setTemp(items[j])
-          items[j] = items[j+1];
-          items[j+1] = tempItem
-        }
-      }
-    }
-  };
   /**
    * Start Edit Function
    *
@@ -232,6 +223,39 @@ export default function App() {
     ]);
   };
 
+  const sortAZ = async () => {
+    try {
+      const value = await fetchItemsAZ(db);
+      setItems(value);
+    } catch (err) {
+      console.log("Failed to fetch items", err);
+    }
+  };
+  const sortZA = async () => {
+    try {
+      const value = await fetchItemsZA(db);
+      setItems(value);
+    } catch (err) {
+      console.log("Failed to fetch items", err);
+    }
+  };
+  const sort123 = async () => {
+    try {
+      const value = await fetchItems123(db);
+      setItems(value);
+    } catch (err) {
+      console.log("Failed to fetch items", err);
+    }
+  };
+  const sort321 = async () => {
+    try {
+      const value = await fetchItems321(db);
+      setItems(value);
+    } catch (err) {
+      console.log("Failed to fetch items", err);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>SQLite Example</Text>
@@ -265,8 +289,20 @@ export default function App() {
         onPress={saveOrUpdate}
       />
       <Button
-        title={"Sort Items"}
-        onPress={sort}
+        title={"Sort (A-Z)"}
+        onPress={sortAZ}
+      />
+      <Button
+        title={"Sort (Z-A)"}
+        onPress={sortZA}
+      />
+      <Button
+        title={"Sort (quantity asc.)"}
+        onPress={sort123}
+      />
+      <Button
+        title={"Sort (quantity desc.)"}
+        onPress={sort321}
       />
       <FlatList
         style={styles.list}
