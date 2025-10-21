@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     backgroundColor: "#fff",
   },
-  info: { flexShrink: 1 },
+  info: { flexShrink: 1},
   name: { fontSize: 16, fontWeight: "600" },
   qty: { fontSize: 14, color: "#666", marginTop: 2 },
   actions: { flexDirection: "row", gap: 8 },

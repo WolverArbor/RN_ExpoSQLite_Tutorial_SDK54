@@ -21,6 +21,7 @@ import {
   fetchItems321
 } from "../data/db";
 import ItemRow from "./components/ItemRow";
+import {Picker} from "@react-native-picker/picker";
 
 export default function App() {
   /**
@@ -41,6 +42,7 @@ export default function App() {
   const [name, setName] = useState<string>("");
   const [quantity, setQuantity] = useState<string>("");
   const [editingId, setEditingId] = useState<number | null>(null);
+  const [enable , setEnable]  = useState("courses");
 
   /**
    * Database State
@@ -255,7 +257,28 @@ export default function App() {
       console.log("Failed to fetch items", err);
     }
   };
-
+  const sort = async () => {
+    try {
+      if(enable === "AZ"){
+        const value = await fetchItemsAZ(db);
+        setItems(value);
+      }
+      if(enable === "ZA"){
+        const value = await fetchItemsZA(db);
+        setItems(value);
+      }
+      if(enable === "123"){
+        const value = await fetchItems123(db);
+        setItems(value);
+      }
+      else{
+        const value = await fetchItems321(db);
+        setItems(value);
+      }
+    } catch (err) {
+      console.log("Failed to fetch items", err);
+    }
+  };
   return (
     <View style={styles.container}>
       <Text style={styles.title}>SQLite Example</Text>
@@ -289,21 +312,22 @@ export default function App() {
         onPress={saveOrUpdate}
       />
       <Button
-        title={"Sort (A-Z)"}
-        onPress={sortAZ}
+        title={"Sort Items"}
+        onPress={sort}
       />
-      <Button
-        title={"Sort (Z-A)"}
-        onPress={sortZA}
-      />
-      <Button
-        title={"Sort (quantity asc.)"}
-        onPress={sort123}
-      />
-      <Button
-        title={"Sort (quantity desc.)"}
-        onPress={sort321}
-      />
+      <View style={styles.container2}>
+        <Picker
+          selectedValue={enable}
+          style={styles.picker}
+          mode={"dialog"}
+          onValueChange={(itemValue) => setEnable(itemValue)}
+        >
+          <Picker.Item label="Sort A-Z" value="AZ" />
+          <Picker.Item label="Sort Z-A" value="ZA" />
+          <Picker.Item label="Sort 123" value="123" />
+          <Picker.Item label="Sort 321" value="321" />
+        </Picker>
+      </View>
       <FlatList
         style={styles.list}
         data={items}
@@ -349,6 +373,18 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     padding: 20,
   },
+  container2: {
+    height: 200,
+    width: 500,
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "flex-start"
+  },
+  picker: {
+    width: 160,
+    height: 40,
+    justifyContent: "flex-start"
+  },
   title: {
     fontSize: 24,
     fontWeight: "bold",
@@ -362,7 +398,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   list: {
-    marginTop: 20,
+    marginTop: 0,
     width: "100%",
   },
   item: {
